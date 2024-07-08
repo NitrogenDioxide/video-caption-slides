@@ -30,6 +30,22 @@ SECTION_TEMPLATE = """
 {caption}
 """
 
+SECTION_WITH_TABS_TEMPLATE = """
+##  {{data-menu-title="{data_menu_title}"}}
+
+<video data-autoplay muted loop controls src="{video_path}"></video>
+
+::: {{.panel-tabset}}
+{caption_tabs}
+:::
+"""
+
+SECTION_TAB_TEMPLATE = """
+### {model_name}
+
+{caption}
+"""
+
 
 def main(
     slide_title: str = "Example Video Captions",
@@ -46,14 +62,31 @@ def main(
         )
 
         for video in video_data:
-            print(
-                SECTION_TEMPLATE.format(
-                    data_menu_title=video["file"].split("/")[-1],
-                    video_path=video["file"],
-                    caption=video["caption"],
-                ),
-                file=f,
-            )
+            caption = video["caption"]
+            if isinstance(caption, dict):
+                caption_tabs = ""
+                for model_name, model_caption in caption.items():
+                    caption_tabs += SECTION_TAB_TEMPLATE.format(
+                        model_name=model_name, caption=model_caption
+                    )
+                print(
+                    SECTION_WITH_TABS_TEMPLATE.format(
+                        data_menu_title=video["file"].split("/")[-1],
+                        video_path=video["file"],
+                        caption_tabs=caption_tabs,
+                    ),
+                    file=f,
+                )
+
+            else:
+                print(
+                    SECTION_TEMPLATE.format(
+                        data_menu_title=video["file"].split("/")[-1],
+                        video_path=video["file"],
+                        caption=caption,
+                    ),
+                    file=f,
+                )
 
 
 if __name__ == "__main__":
