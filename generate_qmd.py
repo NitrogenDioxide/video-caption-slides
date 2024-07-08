@@ -4,6 +4,7 @@ import typer
 
 HEADER_TEMPLATE = """---
 title: {title}
+slide_subtitle: {subtitle}
 format:
   revealjs:
     transition: slide
@@ -22,7 +23,7 @@ format:
 SECTION_TEMPLATE = """
 ##  {{data-menu-title="{data_menu_title}"}}
 
-<video data-autoplay loop src="{video_path}"></video>
+<video data-autoplay muted loop controls src="{video_path}"></video>
 
 ::: {{.scroll-container}}
 
@@ -33,6 +34,7 @@ SECTION_TEMPLATE = """
 
 def main(
     slide_title: str = "Example Video Captions",
+    slide_subtitle: str = "",
     video_data_file: str = "video_data.jsonl",
     output_file: str = "slides.qmd",
 ):
