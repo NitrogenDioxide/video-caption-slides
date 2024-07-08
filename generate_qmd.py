@@ -9,10 +9,12 @@ format:
   revealjs:
     transition: slide
     theme: simple
-    css: custom.css
     background-transition: fade
     transition-speed: fast
     smaller: true
+    scrollable: true
+    width: 100%
+    height: 100%
     controls: true
     slide-number: true
     loop: true
@@ -25,11 +27,8 @@ SECTION_TEMPLATE = """
 
 <video data-autoplay muted loop controls src="{video_path}"></video>
 
-::: {{.scroll-container}}
-
 {caption}
-
-:::"""
+"""
 
 
 def main(
@@ -42,7 +41,9 @@ def main(
         video_data = [json.loads(line) for line in f]
 
     with open(output_file, "w") as f:
-        print(HEADER_TEMPLATE.format(title=slide_title), file=f)
+        print(
+            HEADER_TEMPLATE.format(title=slide_title, subtitle=slide_subtitle), file=f
+        )
 
         for video in video_data:
             print(
